@@ -30,7 +30,11 @@
  
  
 char *host_to_ip(const char *hostname) {
- 
+    /**
+     gethostbyname是线程不安全的（不可重入）里面含有全局变量
+     gethostbyname_r是线程安全的单只支持Ipv4  
+     getaddrinfo是线程安全支持ipv6
+     */
     struct hostent *host_entry = gethostbyname(hostname);
     if (host_entry) {
         return inet_ntoa(*(struct in_addr*)*host_entry->h_addr_list);
